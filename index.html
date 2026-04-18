@@ -1,0 +1,1019 @@
+﻿
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>3D Planejados — Móveis Sob Medida</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --white: #FAFAF8;
+    --off-white: #F4F2EE;
+    --gray-light: #EDEBE7;
+    --gray-mid: #D4D0C8;
+    --gray-text: #8A8680;
+    --charcoal: #2C2B28;
+    --black: #1A1917;
+    --gold: #B89A6A;
+    --gold-light: #D4B896;
+    --gold-pale: #EDE0CC;
+    --bronze: #9A7A50;
+    --nav-h: 80px;
+  }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Montserrat', sans-serif;
+    background: var(--white);
+    color: var(--charcoal);
+    font-size: 15px;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  ::-webkit-scrollbar { width: 5px; }
+  ::-webkit-scrollbar-track { background: var(--off-white); }
+  ::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+  .section-label {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .section-label::before {
+    content: '';
+    width: 32px; height: 1px;
+    background: var(--gold);
+    display: block;
+  }
+  .gold-line {
+    width: 48px; height: 1px;
+    background: linear-gradient(90deg, var(--gold), transparent);
+    margin: 20px 0 28px;
+  }
+  #navbar {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    height: var(--nav-h);
+    display: flex; align-items: center;
+    padding: 0 5%;
+    background: rgba(250, 250, 248, 0.96);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.4s, box-shadow 0.4s;
+  }
+  #navbar.scrolled {
+    border-color: var(--gray-mid);
+    box-shadow: 0 2px 24px rgba(0,0,0,0.06);
+  }
+  .nav-logo {
+    flex: 0 0 auto;
+    text-decoration: none;
+    display: flex; flex-direction: column; line-height: 1;
+  }
+  .nav-logo .logo-main {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: clamp(22px, 2.8vw, 30px);
+    letter-spacing: 0.04em;
+    color: var(--charcoal);
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+  .nav-logo .logo-main span { color: var(--gold); }
+  .nav-logo .logo-sub {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 9px; font-weight: 500;
+    letter-spacing: 0.32em;
+    color: var(--gray-text);
+    text-transform: uppercase;
+    margin-top: 3px;
+  }
+  .nav-logo:hover .logo-main { color: var(--gold); }
+  .nav-center {
+    flex: 1;
+    display: flex; justify-content: center; gap: 40px;
+  }
+  .nav-center a {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    text-decoration: none;
+    position: relative;
+    padding-bottom: 4px;
+    transition: color 0.3s;
+  }
+  .nav-center a::after {
+    content: ''; position: absolute; bottom: 0; left: 0;
+    width: 0; height: 1px;
+    background: var(--gold);
+    transition: width 0.35s ease;
+  }
+  .nav-center a:hover { color: var(--gold); }
+  .nav-center a:hover::after { width: 100%; }
+  .nav-right { flex: 0 0 auto; }
+  .btn-orcamento {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--white);
+    background: var(--charcoal);
+    border: 1px solid var(--charcoal);
+    padding: 12px 24px;
+    text-decoration: none;
+    transition: background 0.3s, color 0.3s, border-color 0.3s;
+    display: inline-block;
+  }
+  .btn-orcamento:hover {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--white);
+  }
+  .hamburger {
+    display: none;
+    flex-direction: column; gap: 5px;
+    cursor: pointer; padding: 8px;
+    margin-left: auto;
+    background: none; border: none;
+  }
+  .hamburger span {
+    display: block; width: 22px; height: 1.5px;
+    background: var(--charcoal);
+    transition: transform 0.3s, opacity 0.3s;
+  }
+  .hamburger.active span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+  .hamburger.active span:nth-child(2) { opacity: 0; }
+  .hamburger.active span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+  .mobile-menu {
+    display: none;
+    position: fixed; top: var(--nav-h); left: 0; right: 0;
+    background: var(--white);
+    border-top: 1px solid var(--gray-light);
+    padding: 32px 5% 40px;
+    z-index: 999;
+    flex-direction: column; gap: 24px;
+    animation: slideDown 0.3s ease;
+  }
+  .mobile-menu.open { display: flex; }
+  @keyframes slideDown { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+  .mobile-menu a {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px; font-weight: 600;
+    letter-spacing: 0.18em; text-transform: uppercase;
+    color: var(--charcoal); text-decoration: none;
+    padding-bottom: 12px;
+    border-bottom: 1px solid var(--gray-light);
+  }
+  .mobile-menu .btn-orcamento { text-align: center; margin-top: 8px; }
+  #hero {
+    min-height: 100vh;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding-top: var(--nav-h);
+    overflow: hidden;
+  }
+  .hero-left {
+    display: flex; flex-direction: column;
+    justify-content: center;
+    padding: 80px 5% 80px 7%;
+    position: relative;
+    z-index: 2;
+  }
+  .hero-left .section-label { margin-bottom: 36px; }
+  .hero-title {
+    font-family: 'Oswald', sans-serif;
+    font-weight: 700;
+    font-size: clamp(48px, 6vw, 82px);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+    color: var(--charcoal);
+    margin-bottom: 6px;
+  }
+  .hero-title .gold { color: var(--gold); }
+  .hero-title .thin {
+    font-weight: 300;
+    font-size: clamp(28px, 3.5vw, 50px);
+    display: block;
+    letter-spacing: 0.08em;
+  }
+  .hero-divider {
+    width: 60px; height: 2px;
+    background: linear-gradient(90deg, var(--gold), var(--gold-light), transparent);
+    margin: 32px 0;
+  }
+  .hero-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(16px, 1.6vw, 20px);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--gray-text);
+    max-width: 380px;
+    line-height: 1.7;
+    margin-bottom: 48px;
+  }
+  .hero-ctas {
+    display: flex; align-items: center; gap: 28px; flex-wrap: wrap;
+  }
+  .btn-primary {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.25em; text-transform: uppercase;
+    color: var(--white);
+    background: var(--gold);
+    border: 1px solid var(--gold);
+    padding: 16px 36px;
+    text-decoration: none;
+    transition: background 0.35s, color 0.35s;
+    display: inline-block;
+  }
+  .btn-primary:hover {
+    background: var(--bronze);
+    border-color: var(--bronze);
+  }
+  .btn-ghost {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--charcoal);
+    text-decoration: none;
+    display: flex; align-items: center; gap: 10px;
+    transition: color 0.3s;
+  }
+  .btn-ghost::after {
+    content: '→'; font-size: 14px;
+    transition: transform 0.3s;
+  }
+  .btn-ghost:hover { color: var(--gold); }
+  .btn-ghost:hover::after { transform: translateX(4px); }
+  .hero-stats {
+    display: flex; gap: 36px; margin-top: 60px;
+    padding-top: 36px;
+    border-top: 1px solid var(--gray-light);
+  }
+  .stat-item { display: flex; flex-direction: column; gap: 4px; }
+  .stat-num {
+    font-family: 'Oswald', sans-serif;
+    font-size: 28px; font-weight: 600;
+    color: var(--charcoal);
+    line-height: 1;
+  }
+  .stat-num span { color: var(--gold); }
+  .stat-label {
+    font-size: 10px; font-weight: 500;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--gray-text);
+  }
+  .hero-right {
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-img-placeholder {
+    width: 100%; height: 100%;
+    background: linear-gradient(135deg, var(--gray-light) 0%, var(--off-white) 50%, var(--gold-pale) 100%);
+    position: relative;
+    overflow: hidden;
+    display: flex; align-items: flex-end;
+  }
+  .hero-img-placeholder::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(180deg, transparent 40%, rgba(184,154,106,0.15) 100%),
+      repeating-linear-gradient(45deg, transparent, transparent 40px, rgba(184,154,106,0.04) 40px, rgba(184,154,106,0.04) 41px);
+  }
+  .room-floor {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 35%;
+    background: linear-gradient(to bottom, var(--gold-pale), #E8D5B7);
+  }
+  .room-wall {
+    position: absolute; top: 0; left: 0; right: 0;
+    height: 68%;
+    background: linear-gradient(to bottom, #F8F5F0, var(--off-white));
+  }
+  .room-wall::after {
+    content: '';
+    position: absolute; bottom: 0; left: 0; right: 0;
+    height: 1px;
+    background: var(--gold-pale);
+  }
+  .wardrobe {
+    position: absolute;
+    bottom: 35%; left: 15%;
+    width: 55%; height: 55%;
+    background: linear-gradient(160deg, #D6C9B4, #C8BAA2);
+    box-shadow: 4px 0 20px rgba(0,0,0,0.08), inset -2px 0 8px rgba(0,0,0,0.06);
+    display: flex;
+  }
+  .ward-panel {
+    flex: 1; border-right: 1px solid rgba(255,255,255,0.4);
+    position: relative;
+  }
+  .ward-panel:last-child { border-right: none; }
+  .ward-handle {
+    position: absolute; right: 10px; top: 50%;
+    transform: translateY(-50%);
+    width: 4px; height: 24px;
+    background: var(--gold);
+    border-radius: 2px;
+  }
+  .shelf {
+    position: absolute;
+    bottom: calc(35% + 55%);
+    left: 15%; width: 55%; height: 8%;
+    background: linear-gradient(160deg, #C8BAA2, #BBAA92);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+  .decor-book {
+    position: absolute;
+    bottom: 0;
+    width: 10px;
+    background: var(--gold);
+    border-radius: 1px;
+  }
+  .decor-vase {
+    position: absolute; bottom: 0;
+    width: 16px; height: 28px;
+    border-radius: 50% 50% 40% 40% / 60% 60% 40% 40%;
+    background: linear-gradient(160deg, var(--gold-light), var(--bronze));
+  }
+  .skirting {
+    position: absolute;
+    bottom: 35%; left: 0; right: 0;
+    height: 3%;
+    background: linear-gradient(to bottom, #E0D0B8, var(--gold-pale));
+  }
+  .hero-badge {
+    position: absolute; top: 40px; right: 40px;
+    width: 90px; height: 90px;
+    border: 1px solid var(--gold);
+    border-radius: 50%;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    background: rgba(250,250,248,0.9);
+    text-align: center;
+  }
+  .hero-badge .b-num {
+    font-family: 'Oswald', sans-serif;
+    font-size: 22px; font-weight: 600;
+    color: var(--charcoal); line-height: 1;
+  }
+  .hero-badge .b-text {
+    font-size: 8px; font-weight: 600;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--gold); margin-top: 3px;
+  }
+  #sobre {
+    padding: 120px 7% 100px;
+    background: var(--white);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .sobre-left .section-label { margin-bottom: 24px; }
+  .sobre-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(32px, 3.5vw, 48px);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    line-height: 1.1;
+    color: var(--charcoal);
+    margin-bottom: 8px;
+  }
+  .sobre-title em { font-style: normal; color: var(--gold); }
+  .sobre-p {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-weight: 300;
+    line-height: 1.8;
+    color: var(--gray-text);
+    margin-bottom: 18px;
+  }
+  .sobre-p strong { font-weight: 500; color: var(--charcoal); }
+  .sobre-right { display: flex; flex-direction: column; gap: 0; }
+  .pilar {
+    padding: 32px 0;
+    border-bottom: 1px solid var(--gray-light);
+    display: flex; gap: 24px; align-items: flex-start;
+    transition: background 0.3s;
+  }
+  .pilar:first-child { border-top: 1px solid var(--gray-light); }
+  .pilar-num {
+    font-family: 'Oswald', sans-serif;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.1em;
+    color: var(--gold);
+    flex: 0 0 28px;
+    padding-top: 3px;
+  }
+  .pilar-title {
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px; font-weight: 600;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: var(--charcoal);
+    margin-bottom: 8px;
+  }
+  .pilar-text {
+    font-size: 13px; font-weight: 300; color: var(--gray-text);
+    line-height: 1.65;
+  }
+  #projetos {
+    padding: 100px 7%;
+    background: var(--off-white);
+  }
+  .projetos-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 56px;
+  }
+  .projetos-header-left .section-label { margin-bottom: 16px; }
+  .projetos-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(28px, 3vw, 42px);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--charcoal);
+  }
+  .projetos-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: auto;
+    gap: 2px;
+  }
+  .proj-card {
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    aspect-ratio: 4/3;
+  }
+  .proj-card.tall { aspect-ratio: 3/4; }
+  .proj-card:nth-child(1) { grid-column: span 2; aspect-ratio: auto; }
+  .proj-card:nth-child(1) .proj-img-wrap { aspect-ratio: 2/1; }
+  .proj-img-wrap { width: 100%; height: 100%; overflow: hidden; }
+  .proj-placeholder {
+    width: 100%; height: 100%; min-height: 220px; position: relative; overflow: hidden;
+    transition: transform 0.6s ease;
+  }
+  .proj-card:hover .proj-placeholder { transform: scale(1.04); }
+  .p1 { background: linear-gradient(135deg, #D6C9B4 0%, #BFA888 50%, #C8B898 100%); }
+  .p2 { background: linear-gradient(135deg, #E8E0D0 0%, #D4C8B4 100%); }
+  .p3 { background: linear-gradient(135deg, #CDC0B0 0%, #B8A890 100%); }
+  .p4 { background: linear-gradient(135deg, #E0D8CC 0%, #C8BCAC 100%); }
+  .p5 { background: linear-gradient(135deg, #D0C4B0 0%, #BDB09C 100%); }
+  .proj-placeholder::after {
+    content: '';
+    position: absolute; inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(26,25,23,0.45) 100%);
+  }
+  .proj-placeholder::before {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(90deg, rgba(255,255,255,0.12) 1px, transparent 1px),
+      linear-gradient(0deg, rgba(255,255,255,0.06) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+  .proj-info {
+    position: absolute; bottom: 0; left: 0; right: 0;
+    padding: 24px;
+    transform: translateY(4px);
+    transition: transform 0.35s ease;
+    z-index: 2;
+  }
+  .proj-card:hover .proj-info { transform: translateY(0); }
+  .proj-tag {
+    font-size: 9px; font-weight: 600;
+    letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--gold-light); margin-bottom: 6px;
+  }
+  .proj-name {
+    font-family: 'Oswald', sans-serif;
+    font-size: 18px; font-weight: 500;
+    color: var(--white); letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  #processo { padding: 120px 7%; background: var(--white); }
+  .processo-header { text-align: center; margin-bottom: 80px; }
+  .processo-header .section-label { justify-content: center; margin-bottom: 20px; }
+  .processo-header .section-label::before { display: none; }
+  .processo-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(28px, 3vw, 40px);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--charcoal);
+    margin-bottom: 16px;
+  }
+  .processo-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-weight: 300; font-style: italic;
+    color: var(--gray-text); max-width: 500px; margin: 0 auto;
+    line-height: 1.7;
+  }
+  .etapas {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    position: relative;
+  }
+  .etapas::before {
+    content: '';
+    position: absolute;
+    top: 36px; left: 12%; right: 12%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-light), var(--gold), var(--gold-light), transparent);
+  }
+  .etapa { padding: 0 32px; text-align: center; position: relative; }
+  .etapa-num-wrap {
+    width: 72px; height: 72px;
+    border: 1px solid var(--gold-pale);
+    background: var(--white);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 32px;
+    position: relative; z-index: 2;
+    transition: background 0.3s, border-color 0.3s;
+  }
+  .etapa:hover .etapa-num-wrap { background: var(--gold); border-color: var(--gold); }
+  .etapa-num {
+    font-family: 'Oswald', sans-serif;
+    font-size: 22px; font-weight: 600;
+    color: var(--gold);
+    transition: color 0.3s;
+  }
+  .etapa:hover .etapa-num { color: var(--white); }
+  .etapa-name {
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--charcoal);
+    margin-bottom: 12px;
+  }
+  .etapa-desc { font-size: 12px; font-weight: 300; color: var(--gray-text); line-height: 1.7; }
+  #diferenciais {
+    padding: 100px 7%;
+    background: var(--charcoal);
+    position: relative;
+    overflow: hidden;
+  }
+  #diferenciais::before {
+    content: '3D';
+    position: absolute;
+    right: -20px; top: 50%;
+    transform: translateY(-50%);
+    font-family: 'Oswald', sans-serif;
+    font-size: 280px; font-weight: 700;
+    color: rgba(255,255,255,0.025);
+    line-height: 1;
+    pointer-events: none;
+    letter-spacing: -0.05em;
+  }
+  .dif-header {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    margin-bottom: 72px;
+  }
+  .dif-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(28px, 3vw, 44px);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    color: var(--white);
+    line-height: 1.1;
+  }
+  .dif-title em { font-style: normal; color: var(--gold); }
+  .dif-header .section-label { color: var(--gold-light); }
+  .dif-header .section-label::before { background: var(--gold-light); }
+  .dif-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.08);
+  }
+  .dif-item { padding: 48px 40px; background: var(--charcoal); transition: background 0.3s; }
+  .dif-item:hover { background: #333330; }
+  .dif-item-icon {
+    width: 44px; height: 44px;
+    border: 1px solid var(--gold);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 28px;
+  }
+  .dif-item-icon svg { width: 20px; height: 20px; stroke: var(--gold); fill: none; stroke-width: 1.5; }
+  .dif-item-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 15px; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--white);
+    margin-bottom: 14px;
+  }
+  .dif-item-text { font-size: 13px; font-weight: 300; color: rgba(255,255,255,0.5); line-height: 1.75; }
+  #contato {
+    padding: 120px 7%;
+    background: var(--off-white);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+  .contato-left .section-label { margin-bottom: 24px; }
+  .contato-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: clamp(32px, 3.5vw, 50px);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.03em;
+    line-height: 1.05;
+    color: var(--charcoal);
+    margin-bottom: 8px;
+  }
+  .contato-title em { font-style: normal; color: var(--gold); }
+  .contato-sub {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 18px; font-weight: 300; font-style: italic;
+    color: var(--gray-text);
+    line-height: 1.7;
+    margin-bottom: 48px;
+    max-width: 440px;
+  }
+  .contato-btns { display: flex; flex-direction: column; gap: 14px; max-width: 320px; }
+  .btn-whatsapp {
+    display: flex; align-items: center; gap: 14px;
+    padding: 18px 28px;
+    background: #2A5C3F;
+    color: var(--white);
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    transition: background 0.3s;
+  }
+  .btn-whatsapp:hover { background: #1F4530; }
+  .btn-whatsapp svg { width: 18px; height: 18px; fill: currentColor; flex-shrink: 0; }
+  .btn-email-link {
+    display: flex; align-items: center; gap: 14px;
+    padding: 18px 28px;
+    background: transparent;
+    border: 1px solid var(--gray-mid);
+    color: var(--charcoal);
+    text-decoration: none;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    transition: border-color 0.3s, color 0.3s;
+  }
+  .btn-email-link:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-email-link svg { width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 1.5; flex-shrink: 0; }
+  .contato-right { background: var(--white); padding: 48px 44px; border: 1px solid var(--gray-light); }
+  .form-title {
+    font-family: 'Oswald', sans-serif;
+    font-size: 14px; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--charcoal);
+    margin-bottom: 32px;
+  }
+  .form-group { margin-bottom: 20px; }
+  .form-group label {
+    display: block;
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--gray-text);
+    margin-bottom: 8px;
+  }
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    width: 100%;
+    padding: 13px 16px;
+    border: 1px solid var(--gray-light);
+    background: var(--off-white);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 13px; font-weight: 300;
+    color: var(--charcoal);
+    outline: none;
+    transition: border-color 0.3s;
+    appearance: none;
+  }
+  .form-group input:focus,
+  .form-group select:focus,
+  .form-group textarea:focus { border-color: var(--gold); background: var(--white); }
+  .form-group textarea { resize: none; height: 100px; }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .btn-form {
+    width: 100%; padding: 16px; background: var(--charcoal); color: var(--white);
+    border: none; cursor: pointer; font-family: 'Montserrat', sans-serif;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.25em; text-transform: uppercase;
+    transition: background 0.3s; margin-top: 8px;
+  }
+  .btn-form:hover { background: var(--gold); }
+  footer { background: var(--black); padding: 60px 7% 32px; }
+  .footer-top {
+    display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 60px;
+    padding-bottom: 48px; border-bottom: 1px solid rgba(255,255,255,0.08); margin-bottom: 32px;
+  }
+  .footer-brand .logo-main {
+    font-family: 'Oswald', sans-serif; font-weight: 700; font-size: 26px;
+    letter-spacing: 0.04em; color: var(--white); text-transform: uppercase;
+  }
+  .footer-brand .logo-main span { color: var(--gold); }
+  .footer-brand .logo-sub {
+    font-size: 9px; font-weight: 500; letter-spacing: 0.3em; text-transform: uppercase;
+    color: rgba(255,255,255,0.3); margin-top: 4px; margin-bottom: 20px;
+  }
+  .footer-brand p {
+    font-size: 12px; font-weight: 300; color: rgba(255,255,255,0.4);
+    line-height: 1.75; max-width: 280px;
+  }
+  .footer-col-title {
+    font-family: 'Oswald', sans-serif; font-size: 11px; font-weight: 600;
+    letter-spacing: 0.2em; text-transform: uppercase; color: var(--gold); margin-bottom: 20px;
+  }
+  .footer-col a {
+    display: block; font-size: 12px; font-weight: 300; color: rgba(255,255,255,0.45);
+    text-decoration: none; margin-bottom: 10px; transition: color 0.3s;
+  }
+  .footer-col a:hover { color: var(--gold-light); }
+  .footer-col p { font-size: 12px; font-weight: 300; color: rgba(255,255,255,0.4); line-height: 1.7; margin-bottom: 8px; }
+  .footer-bottom {
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 12px;
+  }
+  .footer-bottom p {
+    font-size: 11px; font-weight: 300; color: rgba(255,255,255,0.25); letter-spacing: 0.05em;
+  }
+  .footer-bottom span { color: var(--gold); }
+  .fade-up { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .fade-up.visible { opacity: 1; transform: none; }
+  .fade-up-delay-1 { transition-delay: 0.1s; }
+  .fade-up-delay-2 { transition-delay: 0.2s; }
+  .fade-up-delay-3 { transition-delay: 0.3s; }
+  .fade-up-delay-4 { transition-delay: 0.4s; }
+  @media (max-width: 1100px) {
+    .etapas { grid-template-columns: repeat(2, 1fr); gap: 48px; }
+    .etapas::before { display: none; }
+    .dif-grid { grid-template-columns: 1fr 1fr; }
+    .projetos-grid { grid-template-columns: 1fr 1fr; }
+    .proj-card:nth-child(1) { grid-column: span 2; }
+  }
+  @media (max-width: 860px) {
+    :root { --nav-h: 68px; }
+    #hero { grid-template-columns: 1fr; min-height: auto; }
+    .hero-left { padding: 60px 6% 48px; }
+    .hero-right { height: 50vw; min-height: 300px; }
+    .hero-stats { gap: 24px; }
+    .stat-num { font-size: 22px; }
+    #sobre { grid-template-columns: 1fr; gap: 48px; padding: 80px 6%; }
+    #contato { grid-template-columns: 1fr; gap: 48px; padding: 80px 6%; }
+    .dif-grid { grid-template-columns: 1fr; }
+    .projetos-grid { grid-template-columns: 1fr; }
+    .proj-card:nth-child(1) { grid-column: span 1; }
+    .nav-center { display: none; }
+    .nav-right { display: none; }
+    .hamburger { display: flex; }
+    .footer-top { grid-template-columns: 1fr; gap: 32px; }
+    .projetos-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .dif-header { flex-direction: column; align-items: flex-start; gap: 16px; }
+    .footer-bottom { flex-direction: column; text-align: center; }
+    .contato-right { padding: 36px 28px; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 520px) {
+    #hero { padding-top: var(--nav-h); }
+    .hero-left { padding: 48px 5% 40px; }
+    .hero-ctas { gap: 20px; }
+    .hero-stats { flex-wrap: wrap; }
+    .etapas { grid-template-columns: 1fr; }
+    #processo { padding: 80px 6%; }
+    #projetos { padding: 80px 6%; }
+    #diferenciais { padding: 80px 6%; }
+  }
+</style>
+</head>
+<body>
+<nav id="navbar">
+  <a href="#" class="nav-logo">
+    <span class="logo-main"><span>3D</span> Planejados</span>
+    <span class="logo-sub">Móveis Sob Medida</span>
+  </a>
+  <div class="nav-center">
+    <a href="#sobre">Sobre</a>
+    <a href="#projetos">Projetos</a>
+    <a href="#processo">Processo</a>
+    <a href="#contato">Contato</a>
+  </div>
+  <div class="nav-right">
+    <a href="#contato" class="btn-orcamento">Solicitar Orçamento</a>
+  </div>
+  <button class="hamburger" id="hamburgerBtn" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#sobre" onclick="closeMobile()">Sobre</a>
+  <a href="#projetos" onclick="closeMobile()">Projetos</a>
+  <a href="#processo" onclick="closeMobile()">Processo</a>
+  <a href="#contato" onclick="closeMobile()">Contato</a>
+  <a href="#contato" class="btn-orcamento" onclick="closeMobile()">Solicitar Orçamento</a>
+</div>
+<section id="hero">
+  <div class="hero-left">
+    <span class="section-label fade-up">Móveis Planejados Sob Medida</span>
+    <h1 class="hero-title fade-up fade-up-delay-1">
+      <span class="gold">3D</span><br>
+      Planejados<br>
+      <span class="thin">Sob Medida</span>
+    </h1>
+    <div class="hero-divider fade-up fade-up-delay-2"></div>
+    <p class="hero-sub fade-up fade-up-delay-2">
+      Desenvolvemos móveis planejados com atenção ao uso do ambiente, à organização e à linguagem visual de cada projeto.
+    </p>
+    <div class="hero-ctas fade-up fade-up-delay-3">
+      <a href="#contato" class="btn-primary">Solicitar Orçamento</a>
+      <a href="#projetos" class="btn-ghost">Ver Projetos</a>
+    </div>
+    <div class="hero-stats fade-up fade-up-delay-4">
+      <div class="stat-item">
+        <span class="stat-num">Projetos</span>
+        <span class="stat-label">sob medida<br></span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">Soluções</span>
+        <span class="stat-label">personalizadas<br></span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">Precisão</span>
+        <span class="stat-label">em cada detalhe<br></span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-right">
+    <div class="hero-img-placeholder">
+      <div class="room-wall"></div>
+      <div class="room-floor"></div>
+      <div class="skirting"></div>
+      <div class="wardrobe">
+        <div class="ward-panel"><div class="ward-handle"></div></div>
+        <div class="ward-panel"><div class="ward-handle"></div></div>
+        <div class="ward-panel"><div class="ward-handle"></div></div>
+      </div>
+      <div class="shelf">
+        <div class="decor-book" style="height:48px;left:20px;background:#C5A882"></div>
+        <div class="decor-book" style="height:40px;left:32px;background:#B89A6A"></div>
+        <div class="decor-book" style="height:44px;left:44px;background:#9A7A50"></div>
+        <div class="decor-vase" style="right:30px;bottom:0"></div>
+      </div>
+    </div>
+    <div class="hero-badge">
+      <span class="b-num"></span>
+      <span class="b-text">Projeto e<br>Ambiente</span>
+    </div>
+  </div>
+</section>
+<section id="sobre">
+  <div class="sobre-left">
+    <span class="section-label fade-up">Quem Somos</span>
+    <h2 class="sobre-title fade-up fade-up-delay-1">Precisão e<br><em>design</em><br>em cada detalhe</h2>
+    <div class="gold-line fade-up fade-up-delay-1"></div>
+    <p class="sobre-p fade-up fade-up-delay-2">A <strong>3D Planejados</strong> desenvolve móveis planejados com atenção à marcenaria, ao desenho e à forma como cada ambiente é vivido no dia a dia.</p>
+    <p class="sobre-p fade-up fade-up-delay-2">Cada projeto é pensado de acordo com as medidas do espaço, as necessidades de organização e as preferências estéticas de quem vai utilizar o ambiente.</p>
+  </div>
+  <div class="sobre-right fade-up fade-up-delay-2">
+    <div class="pilar"><span class="pilar-num">01</span><div class="pilar-content"><h3 class="pilar-title">Atendimento Personalizado</h3><p class="pilar-text">Cada projeto começa com uma conversa atenta para entender o ambiente, as necessidades de uso e a linguagem visual desejada.</p></div></div>
+    <div class="pilar"><span class="pilar-num">02</span><div class="pilar-content"><h3 class="pilar-title">Projetos Sob Medida</h3><p class="pilar-text">As soluções são desenvolvidas conforme as dimensões do espaço, a rotina de quem utiliza o ambiente e as escolhas estéticas de cada projeto.</p></div></div>
+    <div class="pilar"><span class="pilar-num">03</span><div class="pilar-content"><h3 class="pilar-title">Execução Cuidadosa</h3><p class="pilar-text">O trabalho busca equilíbrio entre acabamento, funcionalidade e coerência visual, respeitando as características de cada ambiente.</p></div></div>
+  </div>
+</section>
+<section id="projetos">
+  <div class="projetos-header">
+    <div class="projetos-header-left">
+      <span class="section-label fade-up">Portfólio</span>
+      <h2 class="projetos-title fade-up fade-up-delay-1">Nossos Projetos</h2>
+    </div>
+    <a href="#contato" class="btn-ghost fade-up fade-up-delay-2">Ver todos</a>
+  </div>
+  <div class="projetos-grid">
+    <div class="proj-card fade-up"><div class="proj-img-wrap"><div class="proj-placeholder p1" style="min-height:280px"></div></div><div class="proj-info"><p class="proj-tag">Quarto Principal</p><h3 class="proj-name">Suíte Contemporânea</h3></div></div>
+    <div class="proj-card fade-up fade-up-delay-1"><div class="proj-img-wrap"><div class="proj-placeholder p2"></div></div><div class="proj-info"><p class="proj-tag">Cozinha</p><h3 class="proj-name">Cozinha Integrada</h3></div></div>
+    <div class="proj-card fade-up fade-up-delay-2"><div class="proj-img-wrap"><div class="proj-placeholder p3"></div></div><div class="proj-info"><p class="proj-tag">Home Office</p><h3 class="proj-name">Escritório Planejado</h3></div></div>
+    <div class="proj-card fade-up fade-up-delay-1"><div class="proj-img-wrap"><div class="proj-placeholder p4"></div></div><div class="proj-info"><p class="proj-tag">Sala de Estar</p><h3 class="proj-name">Painel TV e Estante</h3></div></div>
+    <div class="proj-card fade-up fade-up-delay-2"><div class="proj-img-wrap"><div class="proj-placeholder p5"></div></div><div class="proj-info"><p class="proj-tag">Banheiro</p><h3 class="proj-name">Lavabo Sob Medida</h3></div></div>
+  </div>
+</section>
+<section id="processo">
+  <div class="processo-header fade-up">
+    <span class="section-label">Como Trabalhamos</span>
+    <h2 class="processo-title">Desenvolvimento do Projeto</h2>
+    <p class="processo-sub">Cada projeto é conduzido de forma personalizada, considerando o espaço, as escolhas do cliente e as necessidades de uso do ambiente.</p>
+  </div>
+  <div class="etapas">
+    <div class="etapa fade-up"><div class="etapa-num-wrap"><span class="etapa-num">01</span></div><h3 class="etapa-name">Conversa Inicial</h3><p class="etapa-desc">O ponto de partida é entender o ambiente, as expectativas do cliente e o que faz sentido para a proposta.</p></div>
+    <div class="etapa fade-up fade-up-delay-1"><div class="etapa-num-wrap"><span class="etapa-num">02</span></div><h3 class="etapa-name">Desenho do Projeto</h3><p class="etapa-desc">A proposta é desenvolvida com atenção às medidas, à organização do espaço e à linguagem visual desejada.</p></div>
+    <div class="etapa fade-up fade-up-delay-2"><div class="etapa-num-wrap"><span class="etapa-num">03</span></div><h3 class="etapa-name">Definições Técnicas</h3><p class="etapa-desc">Os detalhes de materiais, acabamentos e composições são ajustados conforme as necessidades do projeto.</p></div>
+    <div class="etapa fade-up fade-up-delay-3"><div class="etapa-num-wrap"><span class="etapa-num">04</span></div><h3 class="etapa-name">Execução</h3><p class="etapa-desc">A realização do projeto acompanha o que foi definido para que o ambiente mantenha coerência entre uso, estética e acabamento.</p></div>
+  </div>
+</section>
+<section id="diferenciais">
+  <div class="dif-header">
+    <h2 class="dif-title fade-up">Por que escolher<br>a <em>3D Planejados</em></h2>
+    <span class="section-label fade-up fade-up-delay-1">Nossos Diferenciais</span>
+  </div>
+  <div class="dif-grid">
+    <div class="dif-item fade-up"><div class="dif-item-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg></div><h3 class="dif-item-title">Leitura do Espaço</h3><p class="dif-item-text">Cada ambiente é analisado a partir de medidas, circulação, usos e da relação entre o mobiliário e a arquitetura.</p></div>
+    <div class="dif-item fade-up fade-up-delay-1"><div class="dif-item-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><polyline points="12 7 12 12 15 15"/></svg></div><h3 class="dif-item-title">Acompanhamento Claro</h3><p class="dif-item-text">O projeto é conduzido com diálogo e alinhamento ao longo do processo, respeitando as definições e os ajustes necessários.</p></div>
+    <div class="dif-item fade-up fade-up-delay-2"><div class="dif-item-icon"><svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg></div><h3 class="dif-item-title">Escolha de Materiais</h3><p class="dif-item-text">As definições de acabamento e composição são pensadas para dialogar com o ambiente e com a proposta estética do projeto.</p></div>
+    <div class="dif-item fade-up"><div class="dif-item-icon"><svg viewBox="0 0 24 24"><path d="M20 7H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg></div><h3 class="dif-item-title">Projeto Sob Medida</h3><p class="dif-item-text">Cada solução é desenvolvida conforme o espaço disponível e as necessidades específicas de uso e organização.</p></div>
+    <div class="dif-item fade-up fade-up-delay-1"><div class="dif-item-icon"><svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div><h3 class="dif-item-title">Trabalho Integrado</h3><p class="dif-item-text">Projeto, definição técnica e realização do ambiente são conduzidos de forma alinhada para manter unidade visual e funcional.</p></div>
+    <div class="dif-item fade-up fade-up-delay-2"><div class="dif-item-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><h3 class="dif-item-title">Atenção aos Detalhes</h3><p class="dif-item-text">O cuidado com proporção, composição e acabamento ajuda a construir ambientes mais coerentes e funcionais.</p></div>
+  </div>
+</section>
+<section id="contato">
+  <div class="contato-left">
+    <span class="section-label fade-up">Fale Conosco</span>
+    <h2 class="contato-title fade-up fade-up-delay-1">Vamos planejar<br>seu <em>ambiente</em><br>com atenção</h2>
+    <div class="gold-line fade-up fade-up-delay-1"></div>
+    <p class="contato-sub fade-up fade-up-delay-2">Entre em contato e conte como é o seu espaço. A partir dessa conversa, fica mais fácil entender necessidades, referências e o caminho mais adequado para o projeto.</p>
+    <div class="contato-btns fade-up fade-up-delay-3">
+      <a href="https://wa.me/?text=Olá%2C%20gostaria%20de%20solicitar%20um%20orçamento%20para%20móveis%20planejados." target="_blank" class="btn-whatsapp"><svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.025.504 3.937 1.395 5.618L0 24l6.615-1.366A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 0 1-5.007-1.373l-.36-.214-3.727.977.993-3.63-.235-.373A9.791 9.791 0 0 1 2.182 12c0-5.42 4.398-9.818 9.818-9.818 5.42 0 9.818 4.398 9.818 9.818 0 5.42-4.398 9.818-9.818 9.818z"/></svg>Chamar no WhatsApp</a>
+      <a href="#contato" class="btn-email-link"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>Enviar Mensagem</a>
+    </div>
+  </div>
+  <div class="contato-right fade-up fade-up-delay-2">
+    <h3 class="form-title">Solicitar Orçamento</h3>
+    <div class="form-row">
+      <div class="form-group"><label>Nome</label><input type="text" placeholder="Seu nome"></div>
+      <div class="form-group"><label>Telefone</label><input type="tel" placeholder="(00) 00000-0000"></div>
+    </div>
+    <div class="form-group"><label>E-mail</label><input type="email" placeholder="seu@email.com.br"></div>
+    <div class="form-group"><label>Ambiente de Interesse</label><select><option value="">Selecione o ambiente</option><option>Quarto / Suíte</option><option>Cozinha</option><option>Sala de Estar</option><option>Home Office</option><option>Banheiro / Lavabo</option><option>Área de Serviço</option><option>Ambiente Completo</option></select></div>
+    <div class="form-group"><label>Mensagem</label><textarea placeholder="Conte um pouco sobre o seu projeto..."></textarea></div>
+    <button class="btn-form" onclick="handleFormSubmit(event)">Enviar Solicitação</button>
+  </div>
+</section>
+<footer>
+  <div class="footer-top">
+    <div class="footer-brand"><div class="logo-main"><span>3D</span> Planejados</div><div class="logo-sub">Móveis Sob Medida</div><p>Desenvolvemos projetos de móveis planejados com atenção ao espaço, à funcionalidade e à linguagem visual de cada ambiente.</p></div>
+    <div class="footer-col"><h4 class="footer-col-title">Navegação</h4><a href="#sobre">Sobre</a><a href="#projetos">Projetos</a><a href="#processo">Processo</a><a href="#contato">Contato</a><a href="#contato">Solicitar Orçamento</a></div>
+    <div class="footer-col"><h4 class="footer-col-title">Contato</h4><p>Atendimento<br>Pelo formulário e botão de WhatsApp</p><p>Projeto<br>Conforme cada necessidade</p><p>Conversa inicial<br>Para entender o seu ambiente</p></div>
+  </div>
+  <div class="footer-bottom"><p>© 2025 <span>3D Planejados</span>. Todos os direitos reservados.</p><p>Desenvolvido com atenção a cada detalhe.</p></div>
+</footer>
+<script>
+  const navbar = document.getElementById('navbar');
+  window.addEventListener('scroll', () => {
+    navbar.classList.toggle('scrolled', window.scrollY > 60);
+  });
+  const ham = document.getElementById('hamburgerBtn');
+  const mMenu = document.getElementById('mobileMenu');
+  ham.addEventListener('click', () => {
+    ham.classList.toggle('active');
+    mMenu.classList.toggle('open');
+  });
+  function closeMobile() {
+    ham.classList.remove('active');
+    mMenu.classList.remove('open');
+  }
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+  setTimeout(() => {
+    document.querySelectorAll('#hero .fade-up').forEach(el => el.classList.add('visible'));
+  }, 120);
+  function handleFormSubmit(e) {
+    e.preventDefault();
+    const btn = e.target;
+    btn.textContent = 'Enviado com Sucesso!';
+    btn.style.background = '#2A5C3F';
+    setTimeout(() => {
+      btn.textContent = 'Enviar Solicitação';
+      btn.style.background = '';
+    }, 3000);
+  }
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) {
+        e.preventDefault();
+        const top = target.getBoundingClientRect().top + window.pageYOffset - 90;
+        window.scrollTo({ top, behavior: 'smooth' });
+      }
+    });
+  });
+</script>
+</body>
+</html>
